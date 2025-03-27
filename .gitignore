@@ -2,3 +2,4 @@ datasets
 docker_mysql
 recursos
 scrapy_app.git
+.gitignore

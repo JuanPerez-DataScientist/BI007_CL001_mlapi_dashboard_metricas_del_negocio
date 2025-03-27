@@ -1,9 +1,9 @@
 <h1 align='center'>
- <b>Machine Learning - Regresión lineal </b>
+ <b>Métricas y KPIs para Inteligencia de Negocios </b>
 </h1>
 
 
-## **Modelo de predicción para el consumo medio de cerveza en un grupo de estudio**
+## **Generador de Informes Interactivos de Métricas y KPIs para BI**
 
 
 ## Table of Contents
