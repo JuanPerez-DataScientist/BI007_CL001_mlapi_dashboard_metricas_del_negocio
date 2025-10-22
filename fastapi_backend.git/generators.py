@@ -14,7 +14,7 @@ def preprocesamiento(df):
     #converting the type of Invoice Date Field from string to datetime.
     metricas_clientes_df['FechaPrimeraCompra'] = pd.to_datetime(metricas_clientes_df['FechaPrimeraCompra'])
     metricas_clientes_df['YearMonthPrimeraCompra'] = metricas_clientes_df['FechaPrimeraCompra'].map(lambda date: 100*date.year + date.month)
-    #La cohorte de un cliente es tambien el mes de su primera compra
+    #La cohorte de un cliente es tambien el añomes de su primera compra
     # metricas_clientes_df['Cohorte'] = metricas_clientes_df['FechaPrimeraCompra'].map(lambda date: 100*date.year + date.month)
     metricas_clientes_df['Cohorte']= metricas_clientes_df['YearMonthPrimeraCompra']
     df = pd.merge(df, metricas_clientes_df, on='CustomerID')
@@ -26,8 +26,16 @@ def preprocesamiento(df):
     df['FechaPrimeraCompra'] = df['FechaPrimeraCompra'].astype(str)
     df['InvoiceDate'] = df['InvoiceDate'].astype(str)
 
-
     return df
+# ------------- fin preprocesamiento ---------#
+
+def generar_ventas_mensuales(df):
+    """ Retorna un DataFrame con ventas mensuales."""
+    #Elije solo unos campos para evitar hacer muy grande el df 
+    ventas_mensuales_df = df[['CustomerID','InvoiceYearMonth','VentaTotal']]
+    
+    return ventas_mensuales_df
+# ------------- fin generar_ventas_mensuales --------- #
 
 def generar_metricas_mensuales(df):
     """Calcula métricas mensuales y retorna un DataFrame con resultados."""
@@ -65,6 +73,8 @@ def generar_metricas_mensuales(df):
     metricas_mensuales_df['InvoiceYearMonth'] = metricas_mensuales_df['InvoiceYearMonth'].astype(str)
     metricas_mensuales_df = metricas_mensuales_df.replace([np.inf, -np.inf], np.nan).fillna(0)
     return metricas_mensuales_df
+# ------------- fin generar_metricas_mensuales ---------#
+
 
 def generar_metricas_clientes(df):
     """Calcula métricas de clientes y retorna un DataFrame con resultados."""
@@ -79,6 +89,7 @@ def generar_metricas_clientes(df):
     metricas_clientes_df['ARPUCliente'] = metricas_clientes_df['IngresosTotal'] / metricas_clientes_df['MesesDeCompras']
 
     return metricas_clientes_df
+# ------------- fin generar_metricas_clientes ---------#
 
 def generar_metricas_cohortes(df):
     """Genera un análisis de cohortes basado en las fechas de compra de clientes."""
@@ -130,5 +141,7 @@ def generar_metricas_cohortes(df):
 
 
     return tasas_retencion_cohortes_df
+# ------------- fin generar_metricas_cohortes ---------#
+
 
 

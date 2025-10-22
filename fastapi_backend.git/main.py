@@ -10,9 +10,9 @@ from sklearn.cluster import KMeans
 from sklearn.model_selection import KFold, cross_val_score, train_test_split
 from fastapi.responses import JSONResponse
 
-from generators import preprocesamiento, generar_metricas_mensuales, generar_metricas_clientes, generar_metricas_cohortes
+from generators import preprocesamiento,generar_ventas_mensuales, generar_metricas_mensuales, generar_metricas_clientes, generar_metricas_cohortes
 app = FastAPI()
-
+#
 # Variables de entorno con nombres correctos
 DB_HOST = os.getenv("DATABASE_HOST", "mysql_service")
 DB_USER = os.getenv("DATABASE_USER", "root")
@@ -32,7 +32,7 @@ def get_db_engine():
         return None
 @app.get("/")
 def read_root():
-    return {"message": "API de Machine Learning!"}
+    return {"message": "API de Metricas de negocio!"}
 
 @app.get("/ventas_mensuales")
 def get_ventas_mensuales():
@@ -41,7 +41,8 @@ def get_ventas_mensuales():
         return JSONResponse(content={"error": "No se pudo conectar a la base de datos"}, status_code=500)
     try:
         df = pd.read_sql("SELECT * FROM onlineretail2b;", con=engine)
-        result = preprocesamiento(df).to_dict(orient='records')
+        df = preprocesamiento(df)
+        result = generar_ventas_mensuales(df).to_dict(orient='records')
         return JSONResponse(content=result, status_code=200)
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
